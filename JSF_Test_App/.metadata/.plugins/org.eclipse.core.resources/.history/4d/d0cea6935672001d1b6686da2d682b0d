@@ -1,0 +1,81 @@
+package beans;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+
+import dao.CarsDAO;
+import util.CarsUtils;
+import util.DataConnect;
+
+@ManagedBean(name="carsBean")
+@SessionScoped
+public class Cars{
+	
+	private List<CarsDAO> cars;
+	private CarsDAO singleCars;
+	private static CarsUtils carsUtils;
+	private boolean isEdit;
+	
+	public Cars() {
+		cars = new ArrayList<CarsDAO>();
+		carsUtils = new CarsUtils();
+		singleCars = new CarsDAO();
+	}
+	
+	public List<CarsDAO> getCars(){
+		return carsUtils.getCarsList();
+	}
+	
+	public CarsDAO getSingleCars() {
+		return singleCars;
+	}
+	
+	public void setSingleCars(CarsDAO singleCars) {
+		this.singleCars = singleCars;
+	}
+	
+	public boolean getIsEdit() {
+		return this.isEdit;
+	}
+	
+	public void setIsEdit(boolean isEdit) {
+		this.isEdit = isEdit;
+	}
+	
+	public void loadCars() {
+		cars.clear();
+		try {
+			cars = carsUtils.getCarsList();
+		}catch (Exception ex) {
+			addErrorMessage (ex);
+		}
+	}
+	
+	public List<CarsDAO> loadCarsFunction(){
+		return carsUtils.getCarsList();
+	}
+	
+	private void addErrorMessage(Exception ex) {
+		FacesMessage message = new FacesMessage(ex.getMessage());
+		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+	
+	public String newCar() {
+		return carsUtils.createCars(singleCars, this.isEdit);
+	}
+	
+	public String findCarById() {
+	 	CarsDAO singleCars = carsUtils.findCarById(this.singleCars.getCid());
+	 	this.singleCars = singleCars;
+		return "carForm.xhtml";
+	}
+}

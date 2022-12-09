@@ -1,0 +1,201 @@
+package util;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.file.UploadedFile;
+
+import com.mysql.cj.jdbc.Blob;
+
+import beans.Cars;
+import dao.CarsDAO;
+
+public class CarsUtils {
+	
+	private Connection con = null;
+	private PreparedStatement ps = null;
+	FileInputStream fis = null;
+	
+	///Method for fetch all Cars from database
+	public List<CarsDAO> getCarsList(){
+		
+		List<CarsDAO> list = new ArrayList<CarsDAO>();
+		
+		try {
+			con = DataConnect.getConnection();
+			String sql = "Select * from Cars";
+			ps = con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+	
+			while (rs.next()) {
+				CarsDAO _cars = new CarsDAO();
+				_cars.setCid(rs.getInt("cid"));
+				_cars.setBrand(rs.getString("brand"));
+				_cars.setModel(rs.getString("model"));
+				_cars.setCyear(rs.getString("cyear"));
+				_cars.setCdescription(rs.getString("cdescription"));
+				_cars.setColor(rs.getString("color"));
+				_cars.setGasPower(rs.getDouble("gasPower"));
+				_cars.setPrice(rs.getDouble("price"));
+				Blob blob = rs.getBlob("pic")
+				_cars.setPic(rs.getBytes("pic"));
+				
+				list.add(_cars);
+			}
+			
+		}catch(Exception err)
+		{
+			System.out.println("getCarsList() error -->" + err.getMessage());
+			err.printStackTrace();
+			return new ArrayList<CarsDAO>();
+		}finally {
+			DataConnect.close(con);
+		}
+		return list;
+	}
+	
+	//Method for insert/Create new record in table Cars
+	public String createCars(CarsDAO model, boolean isEdit){
+		
+		Cars _cars = new Cars();
+		CarsDAO obj = new CarsDAO();
+		String sql_Insert =
+				"Insert into Cars (brand,model,cyear,cdescription,color,gasPower,price,pic) values (?,?,?,?,?,?,?,null)";
+		
+		String sql_Update =
+				"Update Cars Set brand = ?, model = ?, cyear = ?, cdescription = ?, color = ?, gasPower = ?, price = ?, pic = null where cid = ?";
+		try {
+			con = DataConnect.getConnection();
+			ps = con.prepareStatement(isEdit != true ? sql_Insert : sql_Update);
+			ps.setString(1, model.getBrand());
+			ps.setString(2, model.getModel());
+			ps.setString(3, model.getCdate().toString());
+			ps.setString(4, model.getCdescription());
+			ps.setString(5, model.getColor());
+			ps.setDouble(6, roundTwoDigit(model.getGasPower()));
+			ps.setDouble(7, roundTwoDigit(model.getPrice()));
+			if(isEdit != false) {
+				ps.setInt(8, model.getCid());
+			}
+			int rs = ps.executeUpdate();
+			
+			if(rs > 0 && isEdit != true) {
+				System.out.println("Success insert");
+			}else
+			{
+				System.out.println("Success update");
+			}
+			
+			uploadFile(model.getFile(),con);
+			rs = 0;
+			
+		}catch(Exception err)
+		{
+			if(isEdit != true) {
+				System.out.println("createCars() error insert -->" + err.getMessage());
+			}else
+			{
+				System.out.println("createCars() error update -->" + err.getMessage());
+			}
+			err.printStackTrace();
+		}finally {
+			DataConnect.close(con);
+		}
+		
+		//Setting default value for insert on create button
+		_cars.setIsEdit(false);
+		
+		//Cleaning the singleton obj
+		_cars.setSingleCars(new CarsDAO());
+		return "carsListPage.xhtml";
+	}
+	
+	public CarsDAO findCarById(int id) {
+		CarsDAO _cars = new CarsDAO();
+		String sql_Query =
+				"Select * from Cars where cid = ?";
+		
+		try {
+			con = DataConnect.getConnection();
+			ps = con.prepareStatement(sql_Query);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				_cars.setCid(rs.getInt("cid"));
+				_cars.setBrand(rs.getString("brand"));
+				_cars.setModel(rs.getString("model"));
+				_cars.setCyear(rs.getString("cyear"));
+				_cars.setCdescription(rs.getString("cdescription"));
+				_cars.setColor(rs.getString("color"));
+				_cars.setGasPower(rs.getDouble("gasPower"));
+				_cars.setPrice(rs.getDouble("price"));
+				_cars.setPic(rs.getBytes("pic"));
+				return _cars;
+			}
+			
+		}catch(Exception err) {
+			System.out.println("findCarById() error -->" +err.getMessage());
+			err.printStackTrace();
+		}finally {
+			DataConnect.close(con);
+		}
+		
+		return _cars;
+	}
+
+    public void uploadFile(UploadedFile theFile, Connection con) throws Exception {
+        InputStream input = theFile.getInputStream();
+        int id;
+
+        try {
+
+            String sql = "Update Cars Set pic = ? where cid = ?";
+            String sql_Last = "Select * from Cars order by cid desc limit 1";
+
+            ps = con.prepareStatement(sql_Last);
+            ResultSet rsl = ps.executeQuery();
+            
+            if(rsl.next()) {
+            	id = rsl.getInt("cid");
+            }else {
+            	id = 0;
+            }
+            
+            ps = con.prepareStatement(sql);
+
+            // set params
+            ps.setBinaryStream(1, input);
+            ps.setInt(2, id);
+
+            int rs = ps.executeUpdate();
+            if(rs > 0) {
+            	System.out.println("Photo upload success id " + id);
+            }
+            
+        } catch(Exception err) {
+			System.out.println("uploadFile() error -->" +err.getMessage());
+			err.printStackTrace();
+		}
+
+    }
+
+	private double roundTwoDigit(double val) {
+		return (double) Math.round(val * 100) / 100;
+	}
+
+}

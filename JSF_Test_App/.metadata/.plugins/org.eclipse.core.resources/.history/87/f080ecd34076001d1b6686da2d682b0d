@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:b="http://bootsfaces.net/ui">
+<h:head>
+	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1" http-equiv="X-UA-Conpatible" />
+    <link rel="stylesheet" href="https://examples.javacodegeeks.com/wp-content/litespeed/localres/aHR0cHM6Ly9tYXhjZG4uYm9vdHN0cmFwY2RuLmNvbS8=bootstrap/3.3.7/css/bootstrap.min.css" />
+    <!--<h:outputStylesheet library="css" name="jsf-hibernate.css"  />-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"></link>
+	<title>Cars Form</title>
+</h:head>
+<h:body>
+
+	<div class="container mt-5">
+	<div class="row justify-content-center">
+	<div class="col-sm-12 col-md-12 col-lg-10 col-xl-8">
+	<div class="card">
+	  <div class="card-header text-center">
+	   	<h4>Car Info</h4>
+	  </div>
+	  <div class="ui-fluid formgrid grid">
+	  <div class="card-body">
+		<h:form class="row g-3" enctype='multipart/form-data'>
+		<p:growl id="growl" showDetail="true" />
+		  <div class="col-md-4">
+		  		    <p:outputLabel for="inputBrand" class="form-label">Brand</p:outputLabel>
+		  	<div class="ui-inputgroup">
+	        <div class="ui-inputgroup-addon"><i class="pi pi-prime"></i></div>
+		    
+		    <p:inputText required="true" maxlength="60" value="#{carsBean.singleCars.brand}" type="text" class="form-control" id="inputBrand">
+		    	
+		    </p:inputText>
+		    <h:message for="Brand"></h:message>
+		    </div>
+		  </div>
+		  <div class="col-md-4">
+		    <p:outputLabel for="inputModel" class="form-label">Model</p:outputLabel>
+		    <div class="ui-inputgroup">
+	        	<div class="ui-inputgroup-addon"><i class="pi pi-car"></i></div>
+		    
+		    	<p:inputText required="true" maxlength="60" value="#{carsBean.singleCars.model}" type="text" class="form-control" id="inputModel">
+		     	
+		    	</p:inputText>
+		    	<h:message for="Model"></h:message>
+		    </div>	
+		  </div>
+		  <div class="col-md-4">
+		    <p:outputLabel for="inputYear" class="form-label">Year</p:outputLabel>
+			<div class="ui-inputgroup">
+	        	<div class="ui-inputgroup-addon"><i class="pi pi-calendar"></i></div>
+		    
+		    	<p:inputMask required="true" id="inputYear" value="#{carsBean.singleCars.cyear}"  mask="9999" class="form-control" />
+		  		<h:message for="Year"></h:message>
+		  	</div>
+		  </div>
+		  <div class="col-md-9">
+		    <p:outputLabel for="inputDesc" class="form-label">Description</p:outputLabel>
+		    <p:inputTextarea required="true" autoResize="false" value="#{carsBean.singleCars.cdescription}" row="2" col="3" class="form-control" id="inputDesc">
+		    	
+		    </p:inputTextarea>
+		    <h:message for="Description"></h:message>
+		  </div>
+		  
+		  <div class="field col-md-3">
+		    <p:outputLabel for="inputColor" class="form-label">Color</p:outputLabel>
+		    <!--<p:colorPicker required="true" value="#{carsBean.singleCars.color}" class="form-control form-control-color" id="inputColor">
+		    	
+		    </p:colorPicker>-->
+		     	<p:selectOneMenu id="inputColor" value="#{carsBean.singleCars.color}" class="form-control">
+                    <f:selectItem itemLabel="Select Color" itemValue="" noSelectionOption="true"/>
+                    <f:selectItems value="#{carsBean.singleCars.colorList}"/>
+                </p:selectOneMenu>
+                <h:message for="Color"></h:message>
+		  </div>
+	
+		  <div class="field col-md-4">
+		  <p:outputLabel for="inputPrice" class="form-label">Price</p:outputLabel>
+		                  <div class="ui-inputgroup">
+                    <div class="ui-inputgroup-addon"><i class="pi pi-dollar"></i></div>
+		    
+		    <p:inputNumber required="true" value="#{carsBean.singleCars.price}" type="text" class="" id="inputPrice">
+		    	
+		    </p:inputNumber>
+		    <h:message for="inputPrice"></h:message>
+		    </div>
+		  </div>
+		  <div class="field col-md-4">
+		   <p:outputLabel for="inputGas" class="form-label">Gas Power</p:outputLabel>
+		  	<div class="ui-inputgroup">
+	            <div class="ui-inputgroup-addon"><i class="pi pi-filter-fill"></i></div>
+				    <p:inputNumber required="true" value="#{carsBean.singleCars.gasPower}" 
+				    class="" id="inputGas"
+				    >
+			    </p:inputNumber>
+			    <h:message for="inputGas"></h:message>
+		  	</div>
+		  </div>
+		  <div class="col-md-4">
+		  	<p:outputLabel for="inputPic" class="form-label">Picture</p:outputLabel>
+		  	 <p:growl id="messages" showDetail="true" />
+     		<p:fileUpload required="true" id="inputPic" value="#{carsBean.singleCars.file}" class="form-control" mode="simple"/>
+		  	<h:message for="Picture"></h:message>
+		  </div>
+		  <div class="d-grid gap-2 d-flex justify-content-center">
+		    <a href="carsListPage.xhtml" class="btn btn-danger mt-1 me-2">Cancel</a>
+		    <h:commandButton id="btn_Create" action="#{carsBean.newCar}" value="Create" update="growl" class="btn btn-success mt-1 me-2"/>
+		  </div>
+		</h:form>
+		</div>
+		</div>
+		  <div class="card-footer text-muted text-center">
+		    	JSF
+		  </div>
+		</div>  
+		</div>
+		</div>
+		</div>
+</h:body>
+</html>

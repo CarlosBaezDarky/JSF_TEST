@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="https://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1" http-equiv="X-UA-Conpatible" />
+    <link rel="stylesheet" href="https://examples.javacodegeeks.com/wp-content/litespeed/localres/aHR0cHM6Ly9tYXhjZG4uYm9vdHN0cmFwY2RuLmNvbS8=bootstrap/3.3.7/css/bootstrap.min.css" />
+    <!--<h:outputStylesheet library="css" name="jsf-hibernate.css"  />-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"></link>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+	<title>Cars</title>
+</h:head>
+<h:body>
+	<p:growl id="growl" showDetail="true" />
+	<nav class="navbar sticky-top navbar-dark bg-dark">
+	  <div class="container-fluid">
+	    <a class="navbar-brand" href="#">Welcome #{login.user}</a>
+	    <h:form class="d-flex">
+	    	<h:commandLink action="#{login.logout}" class="">
+	    		<i class="fa fa-sign-out" style="color:red"></i>
+			</h:commandLink>
+	    </h:form>
+	  </div>
+	</nav>
+
+	<div class="container mt-3">
+	<div class="row justify-content-center">
+	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+	<div class="card  text-center">
+	  <div class="card-header">
+	   	<!--<h4>Welcome #{login.user}</h4>-->
+	   		<div class="d-grid gap-2 d-flex justify-content-end">
+		   		<h:form>
+						<p:commandButton action="#{carsBean.addCar}" value="Add" icon="pi pi-plus" styleClass="ui-button" style="margin-right: .5rem">
+						
+						</p:commandButton>
+				</h:form>
+			</div>	
+	  </div>
+	  <div class="card-body">
+	<p:dataTable value="#{carsBean.cars}" var="c" 
+		widgetVar="dtCars"
+		reflow="true" styleClass="products-table"
+		rows="5" paginator="true" paginatorPosition="bottom"
+        paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     rowsPerPageTemplate="5,10,{ShowAll|'All'}">
+                       <f:facet name="header">
+                       
+                <div class="products-table-header row">
+                    <span style="font-weight: bold" class="navbar-brand col-9">Cars List</span>
+                    <span class="filter-container ui-input-icon-left col-3"> <i class="pi pi-search"></i>
+                        <p:inputText id="globalFilter" onkeyup="PF('dtCars').filter()" placeholder="Search" />
+                    </span>
+                </div>
+            </f:facet>
+	 <thead class="table-light">
+	
+	  <h:inputHidden id="idField" value="#{c.cid}" />
+	
+	  <p:column headerText="Brand">
+	 	<h:outputText value="#{c.brand}" />
+	  </p:column>
+	  
+	  <p:column headerText="Model">
+	 	<h:outputText value="#{c.model}" />
+	  </p:column>
+	  
+	  <p:column headerText="Date">
+	 	<h:outputText value="#{c.cyear}" />
+	  </p:column>
+	  
+	  <p:column headerText="Description">
+	 	<h:outputText value="#{c.cdescription}" />
+	  </p:column>
+	  
+	  <p:column headerText="Color HEX">
+	 	<h:outputText value="#{c.color}" />
+	  </p:column>
+	  
+	  <p:column headerText="Gas Power">
+	 	<h:outputText value="#{c.gasPower}" />
+	  </p:column>
+	  
+	  <p:column headerText="Price">
+	 	<h:outputText value="#{c.price}" />
+	  </p:column>
+	  
+	  <p:column>
+	 	  <h:form>
+		  	<p:commandButton action="#{carsBean.editCar}" icon="pi pi-pencil" styleClass="edit-button rounded-button ui-button-success">
+		  	
+		  	<f:setPropertyActionListener target="#{carsBean.singleCars.cid}" value="#{c.cid}" />
+		  	</p:commandButton>
+		  </h:form>
+	  </p:column>
+	   </thead>
+	</p:dataTable>
+	</div>
+	  <div class="card-footer text-muted">
+	  </div>
+	</div>  
+	</div>
+	</div>
+	</div>
+
+	
+</h:body>
+</html>

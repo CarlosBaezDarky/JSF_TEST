@@ -1,0 +1,61 @@
+package beans;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.FacesValidator;
+import javax.faces.validator.Validator;
+import javax.faces.validator.ValidatorException;
+
+import dao.UserDAO;
+import util.UserUtils;
+
+@ManagedBean(name="userBean")
+@FacesValidator("userValidator")
+public class User implements Validator {
+	
+	private UserDAO _userDao = new UserDAO();
+	private UserUtils _util = new UserUtils();
+
+	public User() {
+		
+	}
+	
+	public UserDAO getUserDAO() {
+		return this._userDao;
+	}
+	
+	public void setUserDAO(UserDAO _userDao) {
+		this._userDao = _userDao;
+	}
+	
+	public String newUser() {
+		return _util.createUser(_userDao);
+	}
+
+	@Override
+	public void validate(FacesContext context, UIComponent component, Object value)
+			throws ValidatorException {
+		
+		String req= " is required field";
+		FacesMessage msg;
+
+		if(this._userDao.getUsername().isBlank() || this._userDao.getUsername().isEmpty()) {
+			 msg = new FacesMessage(
+					  "Username"+req
+					);
+			 msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+			 throw new ValidatorException(msg);
+		}
+		
+		if(this._userDao.getPwd().isBlank() || this._userDao.getPwd().isEmpty()) {
+			 msg = new FacesMessage(
+					  "Password"+req
+					);
+			 msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+			 throw new ValidatorException(msg);
+		}
+	}
+	
+}

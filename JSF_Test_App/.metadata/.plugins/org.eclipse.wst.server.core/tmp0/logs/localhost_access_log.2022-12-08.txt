@@ -1,0 +1,10 @@
+127.0.0.1 - - [08/Dec/2022:09:37:20 -0400] "GET / HTTP/1.1" 404 751
+0:0:0:0:0:0:0:1 - - [08/Dec/2022:09:37:25 -0400] "GET /mavenjsf/ HTTP/1.1" 200 5578
+0:0:0:0:0:0:0:1 - - [08/Dec/2022:09:37:26 -0400] "GET /mavenjsf/javax.faces.resource/jquery/jquery-plugins.js.html?ln=primefaces&v=12.0.0 HTTP/1.1" 200 146589
+0:0:0:0:0:0:0:1 - - [08/Dec/2022:09:37:26 -0400] "GET /mavenjsf/javax.faces.resource/core.js.html?ln=primefaces&v=12.0.0 HTTP/1.1" 200 89155
+0:0:0:0:0:0:0:1 - - [08/Dec/2022:09:37:26 -0400] "GET /mavenjsf/javax.faces.resource/jquery/jquery.js.html?ln=primefaces&v=12.0.0 HTTP/1.1" 200 89756
+0:0:0:0:0:0:0:1 - - [08/Dec/2022:09:37:26 -0400] "GET /mavenjsf/javax.faces.resource/primeicons/primeicons.css.html?ln=primefaces&v=12.0.0 HTTP/1.1" 200 11193
+0:0:0:0:0:0:0:1 - - [08/Dec/2022:09:37:26 -0400] "GET /mavenjsf/javax.faces.resource/theme.css.html?ln=primefaces-saga&v=12.0.0 HTTP/1.1" 200 199176
+0:0:0:0:0:0:0:1 - - [08/Dec/2022:09:37:26 -0400] "GET /mavenjsf/javax.faces.resource/components.css.html?ln=primefaces&v=12.0.0 HTTP/1.1" 200 108048
+0:0:0:0:0:0:0:1 - - [08/Dec/2022:09:37:26 -0400] "GET /mavenjsf/javax.faces.resource/jsf.js.html?ln=javax.faces HTTP/1.1" 200 44385
+0:0:0:0:0:0:0:1 - - [08/Dec/2022:09:37:26 -0400] "GET /mavenjsf/javax.faces.resource/components.js.html?ln=primefaces&v=12.0.0 HTTP/1.1" 200 492154

@@ -1,0 +1,50 @@
+package util;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import beans.Cars;
+import dao.CarsDAO;
+import dao.UserDAO;
+
+public class UserUtils {
+
+	private Connection con = null;
+	private PreparedStatement ps = null;
+	
+	//Method for insert/Create new record in table User
+	public String createCars(UserDAO model){
+		
+		UserDAO obj = new UserDAO();
+		String sql_Insert =
+				"Insert into Users (uname,password) values (?,?)";
+	
+		try {
+			con = DataConnect.getConnection();
+			ps = con.prepareStatement(sql_Insert);
+			ps.setString(1, model.getUsername());
+			ps.setString(2, model.getPwd());
+			int rs = ps.executeUpdate();
+			
+			if(rs > 0) {
+				System.out.println("Success insert");
+			}
+			
+		}catch(Exception err)
+		{
+			if(isEdit != true) {
+				System.out.println("createCars() error insert -->" + err.getMessage());
+			}else
+			{
+				System.out.println("createCars() error update -->" + err.getMessage());
+			}
+			err.printStackTrace();
+		}finally {
+			DataConnect.close(con);
+		}
+		
+		return "carsListPage.xhtml";
+	}
+	
+	
+}
