@@ -1,0 +1,16 @@
+App de inventario vehiculos
+
+Vistas:
+
+-> Login (Listo)
+-> Listado de vehiculos (main view) (Listo)
+-> formularios (captacion/edicion) (Listo)
+	-> campos 
+		-> marca
+		-> modelo
+		-> año
+		-> caracterisiticas
+		-> color
+		-> combustible
+		-> precio
+		-> foto (solo una)
